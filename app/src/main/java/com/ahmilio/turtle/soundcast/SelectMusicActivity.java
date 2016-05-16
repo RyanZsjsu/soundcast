@@ -1,5 +1,6 @@
 package com.ahmilio.turtle.soundcast;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -25,7 +26,8 @@ public class SelectMusicActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "btnToMain", Toast.LENGTH_SHORT).show();
-                setContentView(R.layout.activity_main);
+                Intent Main = new Intent(SelectMusicActivity.this, MainActivity.class);
+                startActivity(Main);
             }
         });
 

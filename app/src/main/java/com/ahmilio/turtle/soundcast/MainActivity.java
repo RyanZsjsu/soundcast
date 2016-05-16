@@ -1,5 +1,6 @@
 package com.ahmilio.turtle.soundcast;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,19 +22,22 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         setContentView(R.layout.activity_main);
-        FloatingActionButton fabConnect = (FloatingActionButton) findViewById(R.id.fabConnect);
-        Button btnAddMusic = (Button) findViewById(R.id.btnAddMusic);
-        fabConnect.setOnClickListener(new View.OnClickListener() {
+
+        Button btnHost = (Button) findViewById(R.id.btnHost);
+        Button btnJoin = (Button) findViewById(R.id.btnJoin);
+        btnHost.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Not yet implemented", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Hosting!", Toast.LENGTH_SHORT).show();
+                Intent host = new Intent(MainActivity.this, HostActivity.class);
+                startActivity(host);
             }
         });
 
-        btnAddMusic.setOnClickListener(new View.OnClickListener() {
+        btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "btnAddMusic", Toast.LENGTH_SHORT).show();
-                setContentView(R.layout.activity_select_music);
+                Snackbar.make(view, "Not yet implemented! :c", Snackbar.LENGTH_SHORT).show();
+
             }
         });
 

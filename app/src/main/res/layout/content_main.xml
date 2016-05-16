@@ -12,32 +12,46 @@
     tools:context="com.ahmilio.turtle.soundcast.MainActivity"
     tools:showIn="@layout/activity_main">
 
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Music"
-        android:id="@+id/btnAddMusic"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:text="HOST"
+        android:id="@+id/btnHost"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textSize="20dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabConnect"
+    <Button
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:src="@android:drawable/stat_sys_data_bluetooth"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/listView"
-        android:layout_alignEnd="@+id/listView" />
+        android:text="JOIN"
+        android:id="@+id/btnJoin"
+        android:layout_below="@+id/btnHost"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp" />
 
-    <ListView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/btnAddMusic" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="SOUNDCAST"
+        android:id="@+id/tvHome"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="85dp"
+        android:editable="false"
+        android:textSize="55dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="I WANT TO:"
+        android:id="@+id/tvChoice"
+        android:layout_above="@+id/btnHost"
+        android:layout_centerHorizontal="true"
+        android:textSize="25dp" />
 
 </RelativeLayout>
