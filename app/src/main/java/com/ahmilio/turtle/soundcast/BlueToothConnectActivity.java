@@ -69,7 +69,7 @@ public class BlueToothConnectActivity extends Activity implements OnItemClickLis
         init();
         if(btAdapter==null){
             Toast.makeText(getApplicationContext(), "No bluetooth detected", Toast.LENGTH_SHORT).show();
-            finish();
+//            finish();
         }
         else{
             if(!btAdapter.isEnabled()){
