@@ -18,7 +18,8 @@
         android:text="Add Music"
         android:id="@+id/btnAddMusic"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="36dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabConnect"
@@ -36,8 +37,7 @@
         android:id="@+id/lvPlayQueue"
         android:layout_alignTop="@+id/fabConnect"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/btnAddMusic" />
+        android:layout_alignParentStart="true" />
 
     <Switch
         android:layout_width="wrap_content"
@@ -45,8 +45,16 @@
         android:text="Play!"
         android:id="@+id/swtPlay"
         android:checked="false"
+        android:layout_alignTop="@+id/btnAddMusic"
+        android:layout_alignRight="@+id/lvPlayQueue"
+        android:layout_alignEnd="@+id/lvPlayQueue" />
+
+    <ProgressBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pbCurrentTime"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_centerHorizontal="true"
+        android:indeterminate="false" />
 
 </RelativeLayout>

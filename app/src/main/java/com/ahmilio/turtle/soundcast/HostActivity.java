@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -42,6 +43,9 @@ public class HostActivity extends AppCompatActivity {
         Button btnAddMusic = (Button) findViewById(R.id.btnAddMusic);
         Switch swtPlay = (Switch) findViewById(R.id.swtPlay);
 
+        mp = MediaPlayer.create(this, R.raw.ruby);
+//        Toast.makeText(getApplicationContext(), "Now playing: Ruby - Warren Malone", Toast.LENGTH_SHORT).show();
+
         fabConnect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Snackbar.make(view, "Not yet implemented", Snackbar.LENGTH_SHORT).show();
@@ -64,6 +68,13 @@ public class HostActivity extends AppCompatActivity {
                     playSong();
                 else
                     pauseSong();
+            }
+        });
+
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                playSong();
             }
         });
 
@@ -93,8 +104,7 @@ public class HostActivity extends AppCompatActivity {
 
     protected void playSong(){
 //        play with dequeue later
-        if (mp == null) {
-            mp = MediaPlayer.create(this, R.raw.ruby);
+        if (!mp.isPlaying()) {
             Toast.makeText(getApplicationContext(), "Now playing: Ruby - Warren Malone", Toast.LENGTH_SHORT).show();
         }
         mp.start();
