@@ -38,7 +38,9 @@ public class JoinActivity extends AppCompatActivity {
 
         fabConnect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Snackbar.make(view, "Not yet implemented", Snackbar.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Bluetooth page", Toast.LENGTH_SHORT).show();
+                Intent bluetooth = new Intent(JoinActivity.this, BlueToothConnectActivity.class);
+                startActivity(bluetooth);
             }
         });
 
