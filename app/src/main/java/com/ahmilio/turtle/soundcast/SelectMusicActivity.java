@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class SelectMusicActivity extends AppCompatActivity {
@@ -26,11 +27,26 @@ public class SelectMusicActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "btnToMain", Toast.LENGTH_SHORT).show();
-                Intent Main = new Intent(SelectMusicActivity.this, MainActivity.class);
-                startActivity(Main);
+                Intent Host = new Intent(SelectMusicActivity.this, HostActivity.class);
+                startActivity(Host);
+            }
+        });
+        Button btnAddSong = (Button) findViewById(R.id.btnAddSong);
+        btnAddSong.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                onAdd(view);
             }
         });
 
+
+    }
+
+    public void onAdd(View view){
+        Intent data = new Intent();
+        String song = ((EditText)findViewById(R.id.etSong)).getText().toString();
+        data.putExtra("song", song);
+        setResult(RESULT_OK, data);
+        finish();
     }
 
 }
