@@ -20,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         setContentView(R.layout.activity_main);
 
         Button btnHost = (Button) findViewById(R.id.btnHost);

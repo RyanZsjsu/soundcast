@@ -110,6 +110,11 @@ public class HostActivity extends AppCompatActivity {
         mp.start();
     }
 
+    protected void onDestroy(){
+        super.onDestroy();
+        mp.reset();
+    }
+
     protected void pauseSong(){
         mp.pause();
     }
