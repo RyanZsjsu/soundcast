@@ -47,6 +47,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ahmilio.turtle.soundcast.MainActivity" />
         </activity>
+        <activity
+            android:name=".SelectFileActivity"
+            android:label="@string/title_activity_select_file"
+            android:parentActivityName=".SelectMusicActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ahmilio.turtle.soundcast.SelectMusicActivity" />
+        </activity>
     </application>
 
 </manifest>
