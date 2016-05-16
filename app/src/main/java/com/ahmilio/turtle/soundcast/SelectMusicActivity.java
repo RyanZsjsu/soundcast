@@ -7,9 +7,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
+
 public class SelectMusicActivity extends AppCompatActivity {
+    private ListView lvSelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +39,13 @@ public class SelectMusicActivity extends AppCompatActivity {
                 onAdd(view);
             }
         });
-
-
+        Button btnBrowse = (Button) findViewById(R.id.btnbrowse);
+        btnBrowse.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent chooseFile = new Intent(SelectMusicActivity.this, SelectFileActivity.class);
+                startActivity(chooseFile);
+            }
+        });
     }
 
     public void onAdd(View view){

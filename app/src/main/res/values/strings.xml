@@ -94,4 +94,5 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_activity_join">JoinActivity</string>
+    <string name="title_activity_select_file">SelectFileActivity</string>
 </resources>
