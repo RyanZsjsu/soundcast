@@ -68,7 +68,7 @@ public class BlueToothConnectActivity extends Activity implements OnItemClickLis
         setContentView(R.layout.activity_bluetooth_connect);
         init();
         if(btAdapter==null){
-            Toast.makeText(getApplicationContext(), "No bluetooth detected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "No bluetooth detected", Toast.LENGTH_LONG).show();
 //            finish();
         }
         else{
