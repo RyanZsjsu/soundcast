@@ -75,6 +75,13 @@ public class PlayQueue<U> implements Iterable<U>, Serializable {
         return true;
     }
     
+    // inserts a compatible queue at the end of this queue
+    public boolean enqueue(PlayQueue<U> that){
+    	for (U e : that)
+    		this.enqueue(e);
+    	return true;
+    }
+    
     // remove element at certain index
     public U remove(int index){
     	Node<U> rem = null;
@@ -91,19 +98,11 @@ public class PlayQueue<U> implements Iterable<U>, Serializable {
     	return rem.data;
     }
     
-    // inserts a compatible queue at the end of this queue
-    public boolean enqueue(PlayQueue<U> that){
-    	for (U e : that)
-    		this.enqueue(e);
-    	return true;
-    }
-    
     // deletes the element at the start of the queue
     public U dequeue(){
     	if (isEmpty())
     		return null;
     	Node<U> rem = head;
-        rem = head;
         head = head.next;
         if (tail == rem) // if list previously had one element
         	tail = tail.next;
@@ -111,10 +110,29 @@ public class PlayQueue<U> implements Iterable<U>, Serializable {
         return rem.data;
     }
     
+    // returns element at the start of the queue
+    public U peek(){
+    	return head.data;
+    }
+    
+    // returns first n elements at the start of the queue
+    public ArrayList<U> peek(int n){
+    	if (n <= 0 && n > size)
+    		throw new IllegalArgumentException("Cannot retrieve "+n+
+    				" elements; only "+size+" element(s) in queue.");
+    	int i = 0;
+    	ArrayList<U> ret = new ArrayList<>(n);
+    	for (U u : this){
+    		if (i++ >= n)
+    			return ret;
+    		ret.add(u);
+    	}
+    	return ret;
+    }
+    
     // returns an array of all the elements in the queue
     public ArrayList<U> toArray(){
     	ArrayList<U> arr = new ArrayList<>(size);
-    	int i = 0;
     	for (U e : this)
     		arr.add(e);
     	return arr;
@@ -140,8 +158,19 @@ public class PlayQueue<U> implements Iterable<U>, Serializable {
                 cur = cur.next;
             return cur.data;
         }
-
-        public void remove(){ return; }
+        
+        // we'll probably never use this
+        public void remove(){
+        	if (cur == head)
+        		head = head.next;
+        	else {
+        		Node<U> p = head;
+        		while (p.next != cur)
+        			p = p.next;
+            	p.next = cur.next;
+            	cur = p;
+        	}
+        }
     }
     
     // string representation of queue

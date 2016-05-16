@@ -1,6 +1,7 @@
 package com.ahmilio.turtle.soundcast;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,7 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 
@@ -18,6 +21,7 @@ public class HostActivity extends AppCompatActivity {
     private ArrayAdapter<String> queueAdapter;
     private PlayQueue<String> playQueue;
     private ListView lvPlayQueue;
+    private MediaPlayer mp;
     //whoa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,7 @@ public class HostActivity extends AppCompatActivity {
 
         FloatingActionButton fabConnect = (FloatingActionButton) findViewById(R.id.fabConnect);
         Button btnAddMusic = (Button) findViewById(R.id.btnAddMusic);
+        Switch swtPlay = (Switch) findViewById(R.id.swtPlay);
 
         fabConnect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -49,6 +54,16 @@ public class HostActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "btnAddMusic", Toast.LENGTH_SHORT).show();
                 Intent selectMusic = new Intent(HostActivity.this, SelectMusicActivity.class);
                 startActivityForResult(selectMusic, REQUEST_CODE);
+            }
+        });
+
+        swtPlay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    playSong();
+                else
+                    pauseSong();
             }
         });
 
@@ -74,5 +89,18 @@ public class HostActivity extends AppCompatActivity {
         queueAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playQueue.toArray());
         lvPlayQueue.setAdapter(queueAdapter);
         return song;
+    }
+
+    protected void playSong(){
+//        play with dequeue later
+        if (mp == null) {
+            mp = MediaPlayer.create(this, R.raw.ruby);
+            Toast.makeText(getApplicationContext(), "Now playing: Ruby - Warren Malone", Toast.LENGTH_SHORT).show();
+        }
+        mp.start();
+    }
+
+    protected void pauseSong(){
+        mp.pause();
     }
 }
