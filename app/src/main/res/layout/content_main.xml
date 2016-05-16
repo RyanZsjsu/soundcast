@@ -12,8 +12,46 @@
     tools:context="com.ahmilio.turtle.soundcast.MainActivity"
     tools:showIn="@layout/activity_main">
 
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="HOST"
+        android:id="@+id/btnHost"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textSize="20dp" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="JOIN"
+        android:id="@+id/btnJoin"
+        android:layout_below="@+id/btnHost"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="SOUNDCAST"
+        android:id="@+id/tvHome"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="85dp"
+        android:editable="false"
+        android:textSize="55dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="I WANT TO:"
+        android:id="@+id/tvChoice"
+        android:layout_above="@+id/btnHost"
+        android:layout_centerHorizontal="true"
+        android:textSize="25dp" />
+
 </RelativeLayout>

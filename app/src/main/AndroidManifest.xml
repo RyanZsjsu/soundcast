@@ -18,6 +18,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SelectMusicActivity"
+            android:label="@string/title_activity_select_music"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ahmilio.turtle.soundcast.MainActivity" />
+        </activity>
+        <activity
+            android:name=".HostActivity"
+            android:label="@string/title_activity_host"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ahmilio.turtle.soundcast.MainActivity" />
+        </activity>
+        <activity
+            android:name=".JoinActivity"
+            android:label="@string/title_activity_join"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ahmilio.turtle.soundcast.MainActivity" />
+        </activity>
+        <activity
+            android:name=".SelectFileActivity"
+            android:label="@string/title_activity_select_file"
+            android:parentActivityName=".SelectMusicActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ahmilio.turtle.soundcast.SelectMusicActivity" />
+        </activity>
     </application>
 
 </manifest>
