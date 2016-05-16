@@ -9,8 +9,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.ahmilio.turtle.soundcast.HostActivity"
-    tools:showIn="@layout/activity_host">
+    tools:context="com.ahmilio.turtle.soundcast.JoinActivity"
+    tools:showIn="@layout/activity_join">
 
     <Button
         android:layout_width="wrap_content"
@@ -38,15 +38,5 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/btnAddMusic" />
-
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Play!"
-        android:id="@+id/swtPlay"
-        android:checked="false"
-        android:layout_alignTop="@+id/btnAddMusic"
-        android:layout_alignRight="@+id/lvPlayQueue"
-        android:layout_alignEnd="@+id/lvPlayQueue" />
 
 </RelativeLayout>

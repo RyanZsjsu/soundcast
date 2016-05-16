@@ -36,7 +36,9 @@ public class MainActivity extends AppCompatActivity {
         btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Not yet implemented! :c", Snackbar.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Joining!", Toast.LENGTH_SHORT).show();
+                Intent join = new Intent(MainActivity.this, JoinActivity.class);
+                startActivity(join);
 
             }
         });
