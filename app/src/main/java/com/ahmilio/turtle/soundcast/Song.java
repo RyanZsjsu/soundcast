@@ -15,10 +15,10 @@ public class Song implements Serializable {
     private File cache;
     private MediaMetadataRetriever meta;
     private int srctype;
-    private static final int SRC_LOCAL = 1;
-    private static final int SRC_BT = 4;
-    private static final int SRC_WIFIP2P = 16;
-    private static final int SRC_WLAN = 64;
+    public static final int SRC_LOCAL = 1;
+    public static final int SRC_BT = 4;
+    public static final int SRC_WIFIP2P = 16;
+    public static final int SRC_WLAN = 64;
 
     // ctor taking in the song's source pathname and cache directory
     public Song(String src, File cache, int srctype){
@@ -26,8 +26,6 @@ public class Song implements Serializable {
         name = src.substring(src.lastIndexOf(File.pathSeparator)+1);
         this.cache = cache;
         this.srctype = srctype;
-        meta = new MediaMetadataRetriever();
-        meta.setDataSource(cache.getPath());
     }
 
     public Song(String src, int srctype){
@@ -53,6 +51,10 @@ public class Song implements Serializable {
             default:
                 throw new InvalidSourceException("Invalid src code: "+srctype);
         }
+    }
+
+    public boolean cache() throws IOException {
+        return cache(cache.getPath());
     }
 
     // force cache music file

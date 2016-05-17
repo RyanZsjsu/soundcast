@@ -37,7 +37,11 @@
         android:layout_alignTop="@+id/fabConnect"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/btnAddMusic" />
+        android:layout_above="@+id/btnAddMusic"
+        android:longClickable="true"
+        android:fastScrollEnabled="false"
+        android:fastScrollAlwaysVisible="false"
+        android:contextClickable="false" />
 
     <Switch
         android:layout_width="wrap_content"

@@ -1,5 +1,6 @@
 package com.ahmilio.turtle.soundcast;
 
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -7,7 +8,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -16,6 +19,13 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.channels.FileChannel;
+
 
 public class HostActivity extends AppCompatActivity {
     private final int REQUEST_CODE = 100;
@@ -23,6 +33,8 @@ public class HostActivity extends AppCompatActivity {
     private PlayQueue<String> playQueue;
     private ListView lvPlayQueue;
     private MediaPlayer mp;
+    private File cache;
+    private Song nowPlaying;
     //whoa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +51,52 @@ public class HostActivity extends AppCompatActivity {
         lvPlayQueue.setAdapter(queueAdapter);
         queueAdapter.add("last song");
 
+        //nowPlaying = new Song();
+        Log.v("pwd", getApplicationInfo().dataDir);
+
+        cache = getDir("storage", Context.MODE_PRIVATE);
+        Log.v("created dir", cache.getPath());
+
+        File ext = getDir("external", Context.MODE_PRIVATE);
+        Log.v("created dir", ext.getPath());
+
+        File externalRuby = new File(cache+File.separator+"ruby.mp3");
+        Log.v("init externalRuby", externalRuby.getPath());
+        if (!externalRuby.exists()) try {
+            InputStream is = getAssets().open("ruby.mp3");
+
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+
+            FileOutputStream fos = new FileOutputStream(externalRuby);
+            fos.write(buffer);
+            fos.close();
+        } catch (IOException e) {
+            Log.e("Write error",e.getMessage());
+            e.printStackTrace();
+        }
+        Log.v("created ruby.mp3", externalRuby.getPath());
+
+        String source = getApplicationInfo().dataDir;
+        source += File.separator+"ruby.mp3";
+        Log.v("trying source", source);
+        Song me = new Song(source, cache, Song.SRC_LOCAL);
+        try {
+            me.cache();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.v("wrote song", me.getName());
+
         FloatingActionButton fabConnect = (FloatingActionButton) findViewById(R.id.fabConnect);
         Button btnAddMusic = (Button) findViewById(R.id.btnAddMusic);
         Switch swtPlay = (Switch) findViewById(R.id.swtPlay);
 
         mp = MediaPlayer.create(this, R.raw.ruby);
 //        Toast.makeText(getApplicationContext(), "Now playing: Ruby - Warren Malone", Toast.LENGTH_SHORT).show();
+
 
         fabConnect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -73,6 +125,20 @@ public class HostActivity extends AppCompatActivity {
             }
         });
 
+        // makeshift song veto feature
+        lvPlayQueue.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int pos, long id) {
+
+                Log.v("long clicked","pos: " + pos);
+                vetoSong(pos);
+                Log.v("song removed","song: " + pos);
+
+                return true;
+            }
+        });
+
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -91,16 +157,19 @@ public class HostActivity extends AppCompatActivity {
         }
     }
 
-    protected void enqueueSong(String song){
-        playQueue.enqueue(song);
+    protected void refreshList(){
         queueAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playQueue.toArray());
         lvPlayQueue.setAdapter(queueAdapter);
     }
 
+    protected void enqueueSong(String song){
+        playQueue.enqueue(song);
+        refreshList();
+    }
+
     protected String dequeueSong(){
         String song = playQueue.dequeue();
-        queueAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playQueue.toArray());
-        lvPlayQueue.setAdapter(queueAdapter);
+        refreshList();
         return song;
     }
 
@@ -110,6 +179,11 @@ public class HostActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Now playing: Ruby - Warren Malone", Toast.LENGTH_SHORT).show();
         }
         mp.start();
+    }
+
+    protected void vetoSong(int pos){
+        playQueue.remove(pos);
+        refreshList();
     }
 
     protected void onDestroy(){

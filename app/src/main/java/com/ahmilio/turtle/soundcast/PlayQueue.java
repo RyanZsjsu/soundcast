@@ -89,12 +89,15 @@ public class PlayQueue<U> implements Iterable<U>, Serializable {
     		rem = head;
     		head = head.next;
     	}
-    	else if (index >= 0 && index < size){
-        	Node<U> cur = head;
-        	for (int i = 1; i < index; i++, cur = cur.next);
-        	rem = cur.next;
-        	cur.next = rem.next;
-    	}
+    	else if (index >= 0 && index < size) {
+            Node<U> cur = head;
+            for (int i = 1; i < index; i++, cur = cur.next) ;
+            rem = cur.next;
+            cur.next = rem.next;
+            if (rem == tail)
+                tail = cur;
+        }
+        size--;
     	return rem.data;
     }
     
