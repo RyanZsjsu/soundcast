@@ -12,8 +12,9 @@ import java.nio.channels.FileChannel;
 public class Song implements Serializable {
     private String name;
     private String src; // where the source is from
-    private File cache;
-    private MediaMetadataRetriever meta;
+    private String cache;
+    private File copy;
+    //private MediaMetadataRetriever meta;
     private int srctype;
     public static final int SRC_LOCAL = 1;
     public static final int SRC_BT = 4;
@@ -21,9 +22,9 @@ public class Song implements Serializable {
     public static final int SRC_WLAN = 64;
 
     // ctor taking in the song's source pathname and cache directory
-    public Song(String src, File cache, int srctype){
+    public Song(String src, String cache, int srctype){
         this.src = src;
-        name = src.substring(src.lastIndexOf(File.pathSeparator)+1);
+        name = src.substring(src.lastIndexOf(File.separator)+1);
         this.cache = cache;
         this.srctype = srctype;
     }
@@ -32,12 +33,12 @@ public class Song implements Serializable {
         this(src, null, srctype);
     }
 
-    public Song(String src, File cache){
+    public Song(String src, String cache){
         this(src, cache, SRC_LOCAL);
     }
 
     public boolean isCached(){
-        return cache != null && meta != null;
+        return cache != null && /*meta != null &&*/ copy != null;
     }
 
     public boolean isExternal(){
@@ -53,13 +54,17 @@ public class Song implements Serializable {
         }
     }
 
+    public String getFilename(){
+        return name;
+    }
+
     public boolean cache() throws IOException {
-        return cache(cache.getPath());
+        return cache(cache);
     }
 
     // force cache music file
     public boolean cache(String dir) throws IOException {
-        File source, destination = new File(dir+File.pathSeparator+name);
+        File source, destination = new File(dir+File.separator+name);
         if (!isExternal())
             source = new File(src);
         else
@@ -68,10 +73,15 @@ public class Song implements Serializable {
             return false;
 
         copy(source, destination);
-        cache = destination;
-        meta = new MediaMetadataRetriever();
-        meta.setDataSource(cache.getPath());
+        copy = destination;
+        cache = destination.getPath().substring(0,src.lastIndexOf(File.separator));
+//        meta = new MediaMetadataRetriever();
+//        meta.setDataSource(copy.getPath());
         return true;
+    }
+
+    public String getCachedCopy(){
+        return copy.getPath();
     }
 
     public File retrieve(String src){
@@ -94,7 +104,7 @@ public class Song implements Serializable {
         }
         return load;
     }
-
+    /*
     public String getName(){
         return meta.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
     }
@@ -106,6 +116,7 @@ public class Song implements Serializable {
     public String getDuration(){
         return meta.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
     }
+    */
 
     public static boolean isMusic(String path){
         return path.matches(".*\\.(mp3|flac|wav|ogg|mid|m4a|aac|3gp|mkv)$");
