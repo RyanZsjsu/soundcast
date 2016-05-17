@@ -47,7 +47,7 @@ public class JoinActivity extends AppCompatActivity {
         btnAddMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "btnAddMusic", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "btnAddMusic", Toast.LENGTH_SHORT).show();
                 Intent selectMusic = new Intent(JoinActivity.this, SelectMusicActivity.class);
                 startActivityForResult(selectMusic, REQUEST_CODE);
             }
