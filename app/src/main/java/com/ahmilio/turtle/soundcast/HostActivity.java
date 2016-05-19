@@ -2,6 +2,7 @@ package com.ahmilio.turtle.soundcast;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,73 +46,72 @@ public class HostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_host);
 
         lvPlayQueue = (ListView) findViewById(R.id.lvPlayQueue);
-        playQueue = new PlayQueue<>("song1 song2 song3 song4 song5 song6 song7 song8 song9 song10 song11 song12 song13 song14 song15".split("[ ]+"));
+        playQueue = new PlayQueue<>("Hello SoundCast!, Drop It Like It's Hot, Thomas the Tank Engine Theme, imdabes, Never Gonna Give You Up".split(", "));
+        playQueue.enqueue("Ripped Pants");
+        playQueue.enqueue("My House");
+        playQueue.dequeue();
+        playQueue.enqueue("America, Fuck Yeah!");
         queueAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, playQueue.toArray());
         lvPlayQueue.setAdapter(queueAdapter);
         queueAdapter.add("last song");
 
-        //nowPlaying = new Song();
+        // simulating file from external storage
         Log.v("pwd", getApplicationInfo().dataDir);
-
         cache = getCacheDir();
         Log.v("created dir", cache.getPath());
-
         File ext = getDir("external", Context.MODE_PRIVATE);
         Log.v("created dir", ext.getPath());
-
-        File externalRuby = new File(cache+File.separator+"ruby.mp3");
-        Log.v("init externalRuby", externalRuby.getPath());
-        if (!externalRuby.exists()) try {
+        File testExtFile = new File(cache+File.separator+"ruby.mp3");
+        Log.v("init testExtFile", testExtFile.getPath());
+        Log.v("ruby deleted", testExtFile.delete() ? "yes" : "no");
+        if (!testExtFile.exists()) try {
+            testExtFile.createNewFile();
             InputStream is = getResources().openRawResource(
                     getResources().getIdentifier("ruby", "raw", getPackageName()));
 
             int size = is.available();
+            Log.v("ruby input size", ""+size);
             byte[] buffer = new byte[size];
             is.read(buffer);
             is.close();
 
-            FileOutputStream fos = new FileOutputStream(externalRuby);
+            FileOutputStream fos = new FileOutputStream(testExtFile);
             fos.write(buffer);
             fos.close();
         } catch (IOException e) {
             Log.e("Write error",e.getMessage());
             e.printStackTrace();
         }
-        Log.v("created ruby.mp3", externalRuby.getPath());
-
-        String source = externalRuby.getPath();
+        Log.v("created testExtFile", testExtFile.getPath());
+        Log.v("testExtFile size", ""+testExtFile.length());
+        String source = testExtFile.getPath();
         Log.v("trying source", source);
-        Song ruby = new Song(source, cache.getPath(), Song.SRC_LOCAL);
-        Log.v("name of ruby", ruby.getFilename());
 
+        // initializing first song
+        nowPlaying = new Song(source, cache.getPath(), Song.SRC_LOCAL);
         try {
-            ruby.cache();
+            nowPlaying.cache();
         } catch (IOException e) {
             Log.e("Write error",e.getMessage());
             e.printStackTrace();
         }
-        Log.v("cached copy", ruby.getCachedCopy());
-
-//        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-//        mmr.setDataSource(ruby.getCachedCopy());
-//        mmr.setDataSource(this, Uri.parse(externalRuby.getPath()));
-
-        Log.v("wrote song", ruby.getFilename());
-
-//        Log.v("wrote mmr", mmr.toString());
+        Log.v("cached copy", nowPlaying.getCachedCopy().getPath());
 
         FloatingActionButton fabConnect = (FloatingActionButton) findViewById(R.id.fabConnect);
         Button btnAddMusic = (Button) findViewById(R.id.btnAddMusic);
         Switch swtPlay = (Switch) findViewById(R.id.swtPlay);
 
-//        mp = MediaPlayer.create(ruby.getCachedCopy());
-        mp = MediaPlayer.create(this, R.raw.king);
+        // initializing player
+        mp = new MediaPlayer();
+        mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
-            mp.setDataSource(ruby.getCachedCopy());
+            mp.setDataSource(nowPlaying.getCachedCopy().getPath());
+            mp.prepare();
         } catch (IOException e) {
             Log.e("mediaplayer error", e.getMessage());
             e.printStackTrace();
         }
+
 //        Toast.makeText(getApplicationContext(), "Now playing: Ruby - Warren Malone", Toast.LENGTH_SHORT).show();
 
 
@@ -192,7 +193,7 @@ public class HostActivity extends AppCompatActivity {
     protected void playSong(){
 //        play with dequeue later
         if (!mp.isPlaying()) {
-            Toast.makeText(getApplicationContext(), "Now playing: Ruby - Warren Malone", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Now playing: "+nowPlaying.getName()+" - "+nowPlaying.getArtist(), Toast.LENGTH_SHORT).show();
         }
         mp.start();
     }
@@ -204,7 +205,8 @@ public class HostActivity extends AppCompatActivity {
 
     protected void onDestroy(){
         super.onDestroy();
-        mp.reset();
+        mp.release();
+//        mp.reset();
     }
 
     protected void pauseSong(){

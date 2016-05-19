@@ -14,7 +14,7 @@ public class Song implements Serializable {
     private String src; // where the source is from
     private String cache;
     private File copy;
-    //private MediaMetadataRetriever meta;
+    private MediaMetadataRetriever meta;
     private int srctype;
     public static final int SRC_LOCAL = 1;
     public static final int SRC_BT = 4;
@@ -72,17 +72,16 @@ public class Song implements Serializable {
         if (!isMusic(source.getPath()))
             return false;
 
-        copy(source, destination);
+        if (destination.createNewFile())
+            copy(source, destination);
         copy = destination;
         cache = destination.getPath().substring(0,src.lastIndexOf(File.separator));
-//        meta = new MediaMetadataRetriever();
-//        meta.setDataSource(copy.getPath());
+        meta = new MediaMetadataRetriever();
+        meta.setDataSource(copy.getPath());
         return true;
     }
 
-    public String getCachedCopy(){
-        return copy.getPath();
-    }
+    public File getCachedCopy(){ return copy; }
 
     public File retrieve(String src){
         File load = null;
@@ -104,7 +103,7 @@ public class Song implements Serializable {
         }
         return load;
     }
-    /*
+
     public String getName(){
         return meta.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
     }
@@ -116,7 +115,6 @@ public class Song implements Serializable {
     public String getDuration(){
         return meta.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
     }
-    */
 
     public static boolean isMusic(String path){
         return path.matches(".*\\.(mp3|flac|wav|ogg|mid|m4a|aac|3gp|mkv)$");
