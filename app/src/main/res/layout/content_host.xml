@@ -53,4 +53,13 @@
         android:layout_alignRight="@+id/lvPlayQueue"
         android:layout_alignEnd="@+id/lvPlayQueue" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Skip"
+        android:id="@+id/btnSkip"
+        android:layout_alignBottom="@+id/swtPlay"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>
