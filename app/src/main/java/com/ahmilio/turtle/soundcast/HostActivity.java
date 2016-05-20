@@ -34,6 +34,10 @@ public class HostActivity extends AppCompatActivity {
     private MediaPlayer mp;
     private File cache;
     private Song nowPlaying;
+    private FloatingActionButton fabConnect;
+    private Button btnAddMusic;
+    private Switch swtPlay;
+    private Button btnSkip;
     //whoa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,10 +99,10 @@ public class HostActivity extends AppCompatActivity {
         queueAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, titles);
         lvPlayQueue.setAdapter(queueAdapter);
 
-        FloatingActionButton fabConnect = (FloatingActionButton) findViewById(R.id.fabConnect);
-        Button btnAddMusic = (Button) findViewById(R.id.btnAddMusic);
-        Switch swtPlay = (Switch) findViewById(R.id.swtPlay);
-        Button btnSkip = (Button) findViewById(R.id.btnSkip);
+        fabConnect = (FloatingActionButton) findViewById(R.id.fabConnect);
+        btnAddMusic = (Button) findViewById(R.id.btnAddMusic);
+        swtPlay = (Switch) findViewById(R.id.swtPlay);
+        btnSkip = (Button) findViewById(R.id.btnSkip);
 
         // initializing player
         mp = new MediaPlayer();
@@ -154,9 +158,9 @@ public class HostActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
 
-                Log.d(TAG, "onCreate: lvPlayQueue: long-clicked pos: " + pos);
+                Log.d(TAG, "lvPlayQueue: long-clicked pos: " + pos);
                 vetoSong(pos);
-                Log.d(TAG, "onCreate: lvPlayQueue: song "+pos+" removed");
+                Log.d(TAG, "lvPlayQueue: song "+pos+" removed");
 
                 return true;
             }
@@ -165,7 +169,8 @@ public class HostActivity extends AppCompatActivity {
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                nextSong();
+                Log.v(TAG, "MediaPlayer: Song Finished");
+                nextSong(false);
             }
         });
 
@@ -260,12 +265,19 @@ public class HostActivity extends AppCompatActivity {
     }
 
     protected void nextSong(){
-        boolean wasPlaying = mp.isPlaying();
-        mp.reset();
-        if (!playQueue.isEmpty()) {
-            nowPlaying = playQueue.dequeue();
+        nextSong(true);
+    }
+
+    protected void nextSong(boolean skip){
+        if (skip) {
+            Log.v(TAG, "nextSong: "+nowPlaying+" skipped");
             toast("Song skipped");
         }
+        Log.v(TAG, "nextSong: next song requested");
+        boolean wasPlaying = mp.isPlaying();
+        mp.reset();
+        if (!playQueue.isEmpty())
+            nowPlaying = playQueue.dequeue();
         else {
             nowPlaying = null;
             toast("No songs in queue!");
@@ -283,8 +295,10 @@ public class HostActivity extends AppCompatActivity {
             Log.e(TAG, "nextSong: MediaPlayer error: "+ e.getMessage());
             e.printStackTrace();
         }
-        if (wasPlaying)
+        if (wasPlaying || !skip)
             playSong();
+        if (!skip)
+            swtPlay.setChecked(true);
         refreshList();
     }
 
@@ -294,13 +308,15 @@ public class HostActivity extends AppCompatActivity {
             Log.w(TAG, "playSong: song cannot be played because queue is out of songs");
             return;
         }
-        else if (nowPlaying == null) {
+        else if (nowPlaying == null)
             nextSong();
-            return;
-        }
         else if (!mp.isPlaying())
             toast("Now playing: "+nowPlaying.getName()+" - "+nowPlaying.getArtist());
-        mp.start();
+
+        if (nowPlaying != null) {
+            Log.v(TAG, "nextSong: now playing: " + nowPlaying);
+            mp.start();
+        }
     }
 
     protected void vetoSong(int pos){

@@ -120,6 +120,10 @@ public class Song implements Serializable {
         return meta.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
     }
 
+    public String toString(){
+        return isCached() ? getName()+" - "+getArtist() : getFilename();
+    }
+
     public static boolean isMusic(String path){
         return path.matches(".*\\.(mp3|flac|wav|ogg|mid|m4a|aac|3gp|mkv)$");
     }
