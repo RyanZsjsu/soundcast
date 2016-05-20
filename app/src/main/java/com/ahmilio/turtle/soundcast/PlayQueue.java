@@ -121,8 +121,11 @@ public class PlayQueue<U> implements Iterable<U>, Serializable {
     // returns first n elements at the start of the queue
     public ArrayList<U> peek(int n){
     	if (n <= 0 && n > size)
-    		throw new IllegalArgumentException("Cannot retrieve "+n+
-    				" elements; only "+size+" element(s) in queue.");
+    		throw new IllegalArgumentException("Cannot retrieve "+n+" elements from queue.");
+        if (isEmpty())
+            return null;
+        if (n > size)
+            n = size;
     	int i = 0;
     	ArrayList<U> ret = new ArrayList<>(n);
     	for (U u : this){

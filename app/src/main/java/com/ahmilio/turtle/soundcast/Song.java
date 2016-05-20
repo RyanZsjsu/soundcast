@@ -62,23 +62,21 @@ public class Song implements Serializable {
         return cache(cache);
     }
 
-    // force cache music file
+    // caches music file
     public boolean cache(String dir) throws IOException {
         File source, destination = new File(dir+File.separator+name);
-        if (!isExternal())
-            source = new File(src);
-        else
-            source = retrieve(src);
+        source = retrieve(src);
         if (!isMusic(source.getPath()))
             return false;
 
-        if (destination.createNewFile())
+        boolean newlyCached;
+        if (newlyCached = destination.createNewFile())
             copy(source, destination);
         copy = destination;
         cache = destination.getPath().substring(0,src.lastIndexOf(File.separator));
         meta = new MediaMetadataRetriever();
         meta.setDataSource(copy.getPath());
-        return true;
+        return newlyCached;
     }
 
     public File getCachedCopy(){ return copy; }
@@ -102,6 +100,12 @@ public class Song implements Serializable {
                 throw new InvalidSourceException("Invalid src code: "+srctype);
         }
         return load;
+    }
+
+    public boolean removeCachedData(){
+        if (!isCached())
+            return false;
+        return copy.delete();
     }
 
     public String getName(){
