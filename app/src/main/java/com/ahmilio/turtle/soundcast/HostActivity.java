@@ -274,7 +274,6 @@ public class HostActivity extends AppCompatActivity {
             toast("Song skipped");
         }
         Log.v(TAG, "nextSong: next song requested");
-        boolean wasPlaying = mp.isPlaying();
         mp.reset();
         if (!playQueue.isEmpty())
             nowPlaying = playQueue.dequeue();
@@ -295,10 +294,8 @@ public class HostActivity extends AppCompatActivity {
             Log.e(TAG, "nextSong: MediaPlayer error: "+ e.getMessage());
             e.printStackTrace();
         }
-        if (wasPlaying || !skip)
-            playSong();
-        if (!skip)
-            swtPlay.setChecked(true);
+        playSong();
+        swtPlay.setChecked(true);
         refreshList();
     }
 
