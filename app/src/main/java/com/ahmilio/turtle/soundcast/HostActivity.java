@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ public class HostActivity extends AppCompatActivity {
     private Button btnAddMusic;
     private Switch swtPlay;
     private Button btnSkip;
+    private EditText etNowPlaying;
     //whoa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +105,8 @@ public class HostActivity extends AppCompatActivity {
         btnAddMusic = (Button) findViewById(R.id.btnAddMusic);
         swtPlay = (Switch) findViewById(R.id.swtPlay);
         btnSkip = (Button) findViewById(R.id.btnSkip);
+        etNowPlaying = (EditText) findViewById(R.id.etNowPlaying);
+        etNowPlaying.setEnabled(false);
 
         // initializing player
         mp = new MediaPlayer();
@@ -247,7 +251,7 @@ public class HostActivity extends AppCompatActivity {
         ArrayList<String> titles = new ArrayList<>();
         if (!playQueue.isEmpty())
             for (Song s : playQueue.toArray())
-                titles.add(s.isCached() ? (s.getName() + " - " + s.getArtist()) : s.getFilename());
+                titles.add(s.toString());
 
         queueAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, titles);
         lvPlayQueue.setAdapter(queueAdapter);
@@ -311,18 +315,19 @@ public class HostActivity extends AppCompatActivity {
         else if (nowPlaying == null)
             nextSong();
         else if (!mp.isPlaying())
-            toast("Now playing: "+nowPlaying.getName()+" - "+nowPlaying.getArtist());
+            toast("Now playing: "+nowPlaying);
 
         if (nowPlaying != null) {
             Log.v(TAG, "nextSong: now playing: " + nowPlaying);
             mp.start();
         }
+        etNowPlaying.setText(nowPlaying.toString());
     }
 
     protected void vetoSong(int pos){
         Song rem = playQueue.remove(pos);
         if (rem.isCached()){
-            toast(rem.getName()+" - "+rem.getArtist()+" was vetoed!");
+            toast(rem+" was vetoed!");
             Log.i(TAG, "vetoSong: song removed: "+rem.getFilename());
             rem.removeCachedData();
             Log.i(TAG, "vetoSong: "+rem.getFilename()+": cached data removed");

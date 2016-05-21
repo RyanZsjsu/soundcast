@@ -121,6 +121,8 @@ public class Song implements Serializable {
     }
 
     public String toString(){
+        if (isCached() && (getName() == null || getArtist() == null))
+            return getFilename();
         return isCached() ? getName()+" - "+getArtist() : getFilename();
     }
 
