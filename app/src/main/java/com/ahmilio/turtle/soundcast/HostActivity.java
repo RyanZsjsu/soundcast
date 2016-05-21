@@ -56,7 +56,7 @@ public class HostActivity extends AppCompatActivity {
 //        playQueue.enqueue("America, Fuck Yeah!");
 //        queueAdapter.add("last song");
 
-        PlayQueue<String> test = new PlayQueue<>("intro cant king superman ridiculous fall bounce affairs want cash fiona".split(" "));
+        PlayQueue<String> test = new PlayQueue<>("dont_give_up the_lord_of_evil india_bazaar college_friendship african_safari_drums acoustic_indie_pop blues_dooty hacking_the_mainframe".split(" "));
 
         cache = getCacheDir();
         Log.i(TAG, "onCreate: created cache directory: "+cache.getPath());
