@@ -3,6 +3,47 @@ package com.ahmilio.turtle.soundcast;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/* @startuml
+PlayQueue *- Node
+PlayQueue *- LinkedListIterator
+class PlayQueue<U> << Class >> {
+-head : Node<U>
+-tail : Node<U>
+-size : int
+--
++PlayQueue()
++PlayQueue(args : U[])
++clear() : void
++isEmpty() : boolean
++size() : int
++indexOf(element : U) : int
++contains(element : U) : boolean
++enqueue(element : U) : boolean
++remove(index : int) : U
++dequeue() : U
++peek() : U
++peek(n : int) : ArrayList<U>
++toArray() : ArrayList<U>
++iterator() : Iterator<U>
++toString() : String
+}
+
+class Node<E> << Class >> {
+-data : E
+-next : Node<E>
+--
++Node(data : E)
++Node(data : E, next : Node<E>)
+}
+
+class LinkedListIterator << Iterator >> {
+-cur : Node<U>
++hasNext() : boolean
++next() : U
++remove() : void
+}
+ * @enduml*/
+
 // Describes a queue
 public class PlayQueue<U> implements Iterable<U>, Serializable {
     private Node<U> head;

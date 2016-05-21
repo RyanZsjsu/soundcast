@@ -12,6 +12,14 @@ import android.widget.Toast;
 
 import java.io.File;
 
+/* @startuml
+class SelectMusicActivity << Activity >> {
+-lvSelect : ListView
+--
+#onCreate(savedInstanceState : Bundle) : void
++onAdd(view : View) : void
+}
+ * @enduml*/
 public class SelectMusicActivity extends AppCompatActivity {
     private ListView lvSelect;
 

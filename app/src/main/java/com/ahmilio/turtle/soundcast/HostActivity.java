@@ -24,17 +24,53 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-
+/* @startuml
+class HostActivity << Activity >> {
+-REQUEST_CODE : int {static}
+-SONGS_TO_CACHE : int {static}
+-TAG : String {static}
+..
+-playQueue : PlayQueue<Song>
+-mp : MediaPlayer
+-cache : File
+-nowPlaying : Song
+..
+-lvPlayQueue : ListView
+-queueAdapter : ArrayAdapter<String>
+-fabConnect : FloatingActionButton
+-btnAddMusic : Button
+-swtPlay : Switch
+-btnSkip : Button
+-etNowPlaying : EditText
+--
+#onCreate(savedInstanceState : Bundle) : void
+#onDestroy() : void
+#onActivityResult(requestCode : int, resultCode : int, data : Intent) : void
+#toast(msg : String) : void
+-extFileFromRawAsset(ext : File, assetName : String, fileExt : String) : File
+..
+#cacheNext(firstnsongs : int) : void
+#refreshList() : void
+#enqueueSong(s : Song) : void
+#dequeueSong() : Song
+#nextSong() : void
+#nextSong(skip : boolean) : void
+#playSong() : void
+#pauseSong() : void
+#vetoSong(pos : int) : void
+}
+ * @enduml */
 public class HostActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 100;
     private static final int SONGS_TO_CACHE = 4;
     private static final String TAG = "HostActivity";
-    private ArrayAdapter<String> queueAdapter;
+
     private PlayQueue<Song> playQueue;
-    private ListView lvPlayQueue;
     private MediaPlayer mp;
     private File cache;
     private Song nowPlaying;
+    private ListView lvPlayQueue;
+    private ArrayAdapter<String> queueAdapter;
     private FloatingActionButton fabConnect;
     private Button btnAddMusic;
     private Switch swtPlay;
@@ -177,23 +213,22 @@ public class HostActivity extends AppCompatActivity {
                 nextSong(false);
             }
         });
-
-//comment
     }
 
-    private void cacheNext(int firstnsongs) throws IOException {
-        if (playQueue.isEmpty())
-            return;
-        for (Song s : playQueue.peek(firstnsongs))
-            if (!s.isCached()) {
-                if (s.cache())
-                    Log.i(TAG, "bufferNext: cached "+s.getFilename()+": "+s.getCachedCopy().getPath());
-                else
-                    Log.i(TAG, "bufferNext: "+s.getFilename()+" was already cached");
-            }
+    protected void onDestroy(){
+        super.onDestroy();
+        mp.release();
     }
 
-    private void toast(String msg){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+            String song = data.getExtras().getString("song");
+//            enqueueSong(song);
+            toast(song+" not really added to queue!");
+        }
+    }
+
+    protected void toast(String msg){
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
@@ -239,12 +274,16 @@ public class HostActivity extends AppCompatActivity {
         return test;
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
-            String song = data.getExtras().getString("song");
-//            enqueueSong(song);
-            toast(song+" not really added to queue!");
-        }
+    protected void cacheNext(int firstnsongs) throws IOException {
+        if (playQueue.isEmpty())
+            return;
+        for (Song s : playQueue.peek(firstnsongs))
+            if (!s.isCached()) {
+                if (s.cache())
+                    Log.i(TAG, "bufferNext: cached "+s.getFilename()+": "+s.getCachedCopy().getPath());
+                else
+                    Log.i(TAG, "bufferNext: "+s.getFilename()+" was already cached");
+            }
     }
 
     protected void refreshList(){
@@ -324,6 +363,11 @@ public class HostActivity extends AppCompatActivity {
         etNowPlaying.setText(nowPlaying.toString());
     }
 
+    protected void pauseSong(){
+        if (mp.isPlaying())
+            mp.pause();
+    }
+
     protected void vetoSong(int pos){
         Song rem = playQueue.remove(pos);
         if (rem.isCached()){
@@ -337,16 +381,5 @@ public class HostActivity extends AppCompatActivity {
             Log.i(TAG, "vetoSong: song removed: "+rem.getFilename());
         }
         refreshList();
-    }
-
-    protected void onDestroy(){
-        super.onDestroy();
-        mp.release();
-//        mp.reset();
-    }
-
-    protected void pauseSong(){
-        if (mp.isPlaying())
-            mp.pause();
     }
 }

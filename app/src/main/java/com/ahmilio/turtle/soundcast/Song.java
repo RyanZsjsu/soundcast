@@ -9,6 +9,44 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.channels.FileChannel;
 
+/* @startuml
+Song *- InvalidSourceException : throws
+class Song << Class >> {
+-name : String
+-src : String
+-cache : String
+-copy : File
+-meta : MediaMetadataRetriever
+-srctype : int
+..
++SRC_LOCAL : int {static}
++SRC_BT : int {static}
++SRC_WIFIP2P : int {static}
++SRC_WLAN : int {static}
+--
++Song(src : String, cache : String, srctype : int)
++Song(src : String, srctype : int)
++Song(src : String, cache : String)
++isCached() : boolean
++isExternal() : boolean
++cache() : boolean
++cache(dir : String) : boolean
++getCachedCopy() : File
++retrieve(src : String) : File
++removeCachedData() : boolean
++getFilename() : String
++getName() : String
++getArtist() : String
++getDuration() : String
++toString() : String
++isMusic(path : String) boolean {static}
++copy(src : File, dest : File) : void {static}
+}
+
+class InvalidSourceException << Exception >> {
++InvalidSourceException(msg : String)
+}
+ * @enduml*/
 public class Song implements Serializable {
     private String name;
     private String src; // where the source is from
@@ -20,6 +58,7 @@ public class Song implements Serializable {
     public static final int SRC_BT = 4;
     public static final int SRC_WIFIP2P = 16;
     public static final int SRC_WLAN = 64;
+    // nfc?
 
     // ctor taking in the song's source pathname and cache directory
     public Song(String src, String cache, int srctype){
@@ -52,10 +91,6 @@ public class Song implements Serializable {
             default:
                 throw new InvalidSourceException("Invalid src code: "+srctype);
         }
-    }
-
-    public String getFilename(){
-        return name;
     }
 
     public boolean cache() throws IOException {
@@ -106,6 +141,10 @@ public class Song implements Serializable {
         if (!isCached())
             return false;
         return copy.delete();
+    }
+
+    public String getFilename(){
+        return name;
     }
 
     public String getName(){

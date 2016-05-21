@@ -10,6 +10,13 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
+/* @startuml
+class MainActivity << Activity >> {
+#onCreate(savedInstanceState : Bundle) : void
++onCreateOptionsMenu(menu : Menu) : boolean
++onOptionsItemSelected(item : MenuItem) : boolean
+}
+ * @enduml*/
 public class MainActivity extends AppCompatActivity {
     //whoa
     @Override

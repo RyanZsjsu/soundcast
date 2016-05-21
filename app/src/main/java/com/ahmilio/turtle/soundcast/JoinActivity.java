@@ -13,6 +13,19 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+/* @startuml
+class JoinActivity << Activity >> {
+-REQUEST_CODE : int
+-queueAdapter : ArrayAdapter<String>
+-playQueue : PlayQueue<String>
+-lvPlayQueue : ListView
+--
+#onCreate(savedInstanceState : Bundle) : void
+#onActivityResult(requestCode : int, resultCode : int, data : Intent) : void
+#enqueueSong(song : String) : void
+#dequeueSong() : String
+}
+ * @enduml*/
 public class JoinActivity extends AppCompatActivity {
     private final int REQUEST_CODE = 100;
     private ArrayAdapter<String> queueAdapter;
@@ -76,5 +89,4 @@ public class JoinActivity extends AppCompatActivity {
         lvPlayQueue.setAdapter(queueAdapter);
         return song;
     }
-
 }
